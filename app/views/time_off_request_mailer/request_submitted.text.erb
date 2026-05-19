@@ -1,0 +1,10 @@
+New Time Off Request
+
+<%= @employee.full_name %> has submitted a time off request:
+
+Type: <%= @request.leave_type.humanize %>
+Dates: <%= @request.start_date.strftime("%B %d, %Y") %> – <%= @request.end_date.strftime("%B %d, %Y") %>
+Duration: <%= @request.duration_days %> days
+<% if @request.reason.present? %>Reason: <%= @request.reason %><% end %>
+
+Please review and approve or deny the request.

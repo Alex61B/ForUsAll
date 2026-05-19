@@ -1,0 +1,61 @@
+{
+  "permissions": {
+  "allow": [
+    "Bash(ls:*)",
+    "Bash(cat:*)",
+    "Bash(grep:*)",
+    "Bash(find:*)",
+    "Bash(git:*)",
+    "Bash(ruby:*)",
+    "Bash(rails:*)",
+    "Bash(bundle:*)",
+    "Bash(rspec:*)",
+    "Bash(rubocop:*)",
+    "Bash(psql:*)",
+    "Bash(mkdir:*)",
+    "Bash(cp:*)",
+    "Bash(mv:*)",
+    "Bash(chmod:*)",
+    "Bash(echo:*)",
+    "Bash(scripts/*:*)",
+    "Bash(.claude/hooks/*:*)",
+    "Write(*)",
+    "Edit(*)"
+  ],
+  "deny": []
+},
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash|Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/pre_tool_use.sh"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Bash|Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/post_tool_use.sh"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": ".claude/hooks/stop.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+Time Off Request Approved
+
+Your time off request has been approved.
+
+Type: <%= @request.leave_type.humanize %>
+Dates: <%= @request.start_date.strftime("%B %d, %Y") %> – <%= @request.end_date.strftime("%B %d, %Y") %>
+Duration: <%= @request.duration_days %> days

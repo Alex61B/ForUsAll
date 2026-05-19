@@ -1,0 +1,7 @@
+<h2>Time Off Request Approved</h2>
+<p>Your time off request has been <strong>approved</strong>.</p>
+<ul>
+  <li><strong>Type:</strong> <%= @request.leave_type.humanize %></li>
+  <li><strong>Dates:</strong> <%= @request.start_date.strftime("%B %d, %Y") %> – <%= @request.end_date.strftime("%B %d, %Y") %></li>
+  <li><strong>Duration:</strong> <%= @request.duration_days %> days</li>
+</ul>

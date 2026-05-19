@@ -1,0 +1,6 @@
+<h2>Time Off Request Cancelled</h2>
+<p>A time off request has been <strong>cancelled</strong>.</p>
+<ul>
+  <li><strong>Type:</strong> <%= @request.leave_type.humanize %></li>
+  <li><strong>Dates:</strong> <%= @request.start_date.strftime("%B %d, %Y") %> – <%= @request.end_date.strftime("%B %d, %Y") %></li>
+</ul>

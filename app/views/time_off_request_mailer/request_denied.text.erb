@@ -1,0 +1,8 @@
+Time Off Request Denied
+
+Your time off request has been denied.
+
+Type: <%= @request.leave_type.humanize %>
+Dates: <%= @request.start_date.strftime("%B %d, %Y") %> – <%= @request.end_date.strftime("%B %d, %Y") %>
+
+Please contact your manager if you have questions.

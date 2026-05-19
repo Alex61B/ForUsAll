@@ -1,0 +1,6 @@
+Time Off Request Cancelled
+
+A time off request has been cancelled.
+
+Type: <%= @request.leave_type.humanize %>
+Dates: <%= @request.start_date.strftime("%B %d, %Y") %> – <%= @request.end_date.strftime("%B %d, %Y") %>

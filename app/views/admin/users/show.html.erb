@@ -1,0 +1,18 @@
+<div class="d-flex justify-content-between mb-3">
+  <h1><%= @user.full_name %></h1>
+  <div class="d-flex gap-2">
+    <%= link_to "Time Off Requests", admin_time_off_requests_path(user_id: @user.id), class: "btn btn-outline-secondary" %>
+    <%= link_to "Edit", edit_admin_user_path(@user), class: "btn btn-outline-primary" %>
+  </div>
+</div>
+<div class="card">
+  <div class="card-body">
+    <dl class="row mb-0">
+      <dt class="col-sm-3">Email</dt><dd class="col-sm-9"><%= @user.email %></dd>
+      <dt class="col-sm-3">Role</dt><dd class="col-sm-9"><%= @user.role %></dd>
+      <dt class="col-sm-3">Department</dt><dd class="col-sm-9"><%= @user.department&.name || "—" %></dd>
+      <dt class="col-sm-3">Manager</dt><dd class="col-sm-9"><%= @user.manager&.full_name || "—" %></dd>
+      <dt class="col-sm-3">Direct Reports</dt><dd class="col-sm-9"><%= @user.direct_reports.count %></dd>
+    </dl>
+  </div>
+</div>

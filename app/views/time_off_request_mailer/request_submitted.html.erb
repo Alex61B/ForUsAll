@@ -1,0 +1,11 @@
+<h2>New Time Off Request</h2>
+<p><strong><%= @employee.full_name %></strong> has submitted a time off request:</p>
+<ul>
+  <li><strong>Type:</strong> <%= @request.leave_type.humanize %></li>
+  <li><strong>Dates:</strong> <%= @request.start_date.strftime("%B %d, %Y") %> – <%= @request.end_date.strftime("%B %d, %Y") %></li>
+  <li><strong>Duration:</strong> <%= @request.duration_days %> days</li>
+  <% if @request.reason.present? %>
+    <li><strong>Reason:</strong> <%= @request.reason %></li>
+  <% end %>
+</ul>
+<p>Please review and approve or deny the request.</p>

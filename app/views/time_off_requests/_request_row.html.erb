@@ -1,0 +1,10 @@
+<tr>
+  <td><%= tor.user.full_name %></td>
+  <td><span class="badge bg-info text-dark"><%= tor.leave_type.humanize %></span></td>
+  <td><%= tor.start_date.strftime("%b %d") %> – <%= tor.end_date.strftime("%b %d, %Y") %> (<%= tor.duration_days %> day<%= "s" if tor.duration_days != 1 %>)</td>
+  <td>
+    <% badge_class = { "pending" => "warning text-dark", "approved" => "success", "denied" => "danger", "cancelled" => "secondary" }[tor.status] %>
+    <span class="badge bg-<%= badge_class %>"><%= tor.status.capitalize %></span>
+  </td>
+  <td><%= link_to "View", time_off_request_path(tor), class: "btn btn-sm btn-outline-primary" %></td>
+</tr>

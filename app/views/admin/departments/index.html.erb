@@ -1,0 +1,21 @@
+<div class="d-flex justify-content-between mb-3">
+  <h1>Departments</h1>
+  <%= link_to "New Department", new_admin_department_path, class: "btn btn-primary" %>
+</div>
+<table class="table table-hover">
+  <thead><tr><th>Name</th><th>Users</th><th></th></tr></thead>
+  <tbody>
+    <% @departments.each do |dept| %>
+      <tr>
+        <td><%= dept.name %></td>
+        <td><%= dept.users.count %></td>
+        <td>
+          <%= link_to "Edit", edit_admin_department_path(dept), class: "btn btn-sm btn-outline-secondary" %>
+          <%= button_to "Delete", admin_department_path(dept), method: :delete,
+              class: "btn btn-sm btn-outline-danger",
+              data: { confirm: "Delete #{dept.name}?" } %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

@@ -1,0 +1,7 @@
+<h2>Time Off Request Denied</h2>
+<p>Your time off request has been <strong>denied</strong>.</p>
+<ul>
+  <li><strong>Type:</strong> <%= @request.leave_type.humanize %></li>
+  <li><strong>Dates:</strong> <%= @request.start_date.strftime("%B %d, %Y") %> – <%= @request.end_date.strftime("%B %d, %Y") %></li>
+</ul>
+<p>Please contact your manager if you have questions.</p>
