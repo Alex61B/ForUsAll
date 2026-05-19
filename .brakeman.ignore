@@ -1,0 +1,8 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "a7c1c32bf020949eda957617751a03f9438caed0e4e794fa39a3074bb78fd268",
+      "note": "Role is only conditionally added to the permit list when current_user.admin? is true. The Pundit authorize call in update enforces access control."
+    }
+  ]
+}

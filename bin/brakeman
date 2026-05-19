@@ -2,4 +2,6 @@
 require "rubygems"
 require "bundler/setup"
 
+ARGV.push("-i", ".brakeman.ignore") unless ARGV.include?("-i") || ARGV.include?("--ignore-config")
+
 load Gem.bin_path("brakeman", "brakeman")

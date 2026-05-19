@@ -13,9 +13,7 @@ class Api::V1::UsersController < Api::V1::BaseController
 
   def update
     authorize @user
-    permitted = user_params
-    permitted.delete(:role) unless current_user.admin?
-    if @user.update(permitted)
+    if @user.update(user_params)
       render_jsonapi(UserSerializer, @user)
     else
       render_jsonapi_errors(@user)
@@ -29,6 +27,8 @@ class Api::V1::UsersController < Api::V1::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :department_id, :manager_id, :role)
+    allowed = [ :first_name, :last_name, :email, :department_id, :manager_id ]
+    allowed << :role if current_user.admin?
+    params.require(:user).permit(*allowed)
   end
 end

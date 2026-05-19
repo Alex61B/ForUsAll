@@ -24,6 +24,9 @@ class Admin::UsersController < Admin::BaseController
   end
 
   def user_params
-    params.require(:user).permit(:first_name, :last_name, :email, :role, :department_id, :manager_id)
+    permitted = params.require(:user).permit(:first_name, :last_name, :email, :department_id, :manager_id)
+    role = params.dig(:user, :role)
+    permitted[:role] = role if role.present? && User.roles.key?(role.to_s)
+    permitted
   end
 end

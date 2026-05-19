@@ -523,3 +523,71 @@ One file needs editing (already in .workflow_plan_files):
 
 **Files Changed**: app/policies/application_policy.rb
 **Verification**: pending (advancing to TEST)
+
+### Prompt #27 — RESEARCH State (Remediation Cycle 1)
+
+**Date**: 2026-05-19
+**Tool**: Claude Code
+**State**: RESEARCH
+**Prompt**:
+> Fix CI failures: (1) test isolation — seeds leak into specs via db:prepare on fresh DB (Rails 7.1+ behavior) + DatabaseCleaner not configured; (2) brakeman mass assignment warnings for :role in api/v1/users_controller and admin/users_controller.
+
+**Output Summary**:
+Root causes identified:
+- `db:prepare` on fresh CI database runs `db:seed` (Rails 7.1+ behavior), and `use_transactional_fixtures: true` only rolls back per-example — seed records persist for all examples.
+- `database_cleaner-active_record` is in Gemfile but never configured; adding it to `rails_helper.rb` with truncation-before-suite + transaction-per-example fixes isolation.
+- `api/v1/users_controller`: `:role` in `permit()` triggers brakeman even though it's deleted post-permit; fix by building the permit list conditionally.
+- `admin/users_controller`: `:role` in `permit()` is intentional (admin-only) but brakeman can't trace auth; fix by moving role handling out of `permit()`.
+All three files being modified are already in `.workflow_plan_files`.
+
+**Files Changed**: none (research only)
+**Verification**: not applicable
+
+### Prompt #28 — PLAN State (Remediation Cycle 1)
+
+**Date**: 2026-05-19
+**Tool**: Claude Code
+**State**: PLAN
+**Prompt**:
+> Plan remediation: configure DatabaseCleaner in rails_helper.rb and fix brakeman :role mass assignment in both controllers.
+
+**Output Summary**:
+Three files to edit (all already in .workflow_plan_files):
+1. spec/rails_helper.rb — require database_cleaner/active_record; set use_transactional_fixtures false; add before/after hooks for DatabaseCleaner.
+2. app/controllers/api/v1/users_controller.rb — remove permitted.delete(:role) from update; build allowed list conditionally in user_params.
+3. app/controllers/admin/users_controller.rb — remove :role from permit(); handle role separately via direct param assignment with enum validation.
+No new files needed.
+
+**Files Changed**: none (plan only)
+**Verification**: not applicable
+
+### Prompt #29 — IMPLEMENT State (Remediation Cycle 1)
+
+**Date**: 2026-05-19
+**Tool**: Claude Code
+**State**: IMPLEMENT
+**Prompt**:
+> Fix test isolation and brakeman mass assignment warnings.
+
+**Output Summary**:
+Three files edited:
+- spec/rails_helper.rb: require database_cleaner/active_record; use_transactional_fixtures = false; added DatabaseCleaner before/after suite hooks.
+- app/controllers/api/v1/users_controller.rb: removed post-permit delete(:role); user_params now conditionally permits :role only for admin users.
+- app/controllers/admin/users_controller.rb: removed :role from permit(); added explicit role assignment with User.roles enum validation.
+
+**Files Changed**: spec/rails_helper.rb, app/controllers/api/v1/users_controller.rb, app/controllers/admin/users_controller.rb
+**Verification**: pending (advancing to TEST)
+
+### Prompt #30 — TEST State (Remediation Cycle 1)
+
+**Date**: 2026-05-19
+**Tool**: Claude Code
+**State**: TEST
+**Prompt**:
+> Run verify.sh after DatabaseCleaner and brakeman fixes.
+
+**Output Summary**:
+All checks passed: db:prepare, 114 examples (0 failures), routes (85 lines), RuboCop (81 files, 0 offenses). .workflow_verified written.
+
+**Files Changed**: none
+**Verification**: passed
