@@ -591,3 +591,97 @@ All checks passed: db:prepare, 114 examples (0 failures), routes (85 lines), Rub
 
 **Files Changed**: none
 **Verification**: passed
+
+---
+
+### Prompt #31 — RESEARCH State (Security Remediation — CVE-2026-32700 / CVE-2026-40295)
+
+**Date**: 2026-05-19
+**Tool**: Claude Code
+**State**: RESEARCH
+**Prompt**:
+> Fix the remaining GitHub Actions scan_ruby failure caused by vulnerable Devise versions.
+> CVE-2026-32700 and CVE-2026-40295 flagged devise 4.9.4. Required version: devise >= 5.0.4.
+
+**Output Summary**:
+Root cause: `gem "devise", "~> 4.9"` in Gemfile uses pessimistic versioning that caps the
+installed version below 5.0. Both CVEs require devise >= 5.0.4. The fix is a single Gemfile
+constraint change from `"~> 4.9"` to `"~> 5.0"` followed by `bundle update devise`.
+Confirmed: devise 5.0.4 is already installed locally. User model uses only standard Devise modules
+(database_authenticatable, registerable, recoverable, rememberable, validatable). Initializer
+uses no deprecated options. No Devise 5 breaking-change surface area identified.
+
+**Files Changed**: PROMPTS.md (this entry)
+**Verification**: not applicable (RESEARCH state)
+
+---
+
+### Prompt #32 — PLAN State (Security Remediation — CVE-2026-32700 / CVE-2026-40295)
+
+**Date**: 2026-05-19
+**Tool**: Claude Code
+**State**: PLAN
+**Prompt**:
+> Plan fix for bundler-audit CVE-2026-32700 / CVE-2026-40295: upgrade Devise from ~> 4.9 to ~> 5.0.
+
+**Output Summary**:
+Single-file change. Gemfile is already in .workflow_plan_files.
+- Gemfile: change `gem "devise", "~> 4.9"` → `gem "devise", "~> 5.0"`
+- Run `bundle update devise` after the change (Bash, allowed in IMPLEMENT).
+- Gemfile.lock will be updated automatically by bundler.
+No other files need changes; Devise 5 is API-compatible with the modules in use.
+
+**Files Changed**: PROMPTS.md (this entry)
+**Verification**: not applicable (PLAN state)
+
+---
+
+### Prompt #33 — IMPLEMENT State (Security Remediation — CVE-2026-32700 / CVE-2026-40295)
+
+**Date**: 2026-05-19
+**Tool**: Claude Code
+**State**: IMPLEMENT
+**Prompt**:
+> Update Devise from ~> 4.9 to ~> 5.0 to resolve CVE-2026-32700 and CVE-2026-40295.
+
+**Output Summary**:
+- Gemfile: changed `gem "devise", "~> 4.9"` → `gem "devise", "~> 5.0"`
+- Ran `bundle update devise` → installed devise 5.0.4 (was 4.9.4), zeitwerk 2.8.1 (was 2.7.5)
+- bundler-audit: "No vulnerabilities found" — CVEs resolved
+- RSpec: 114 examples, 0 failures — Devise 5 fully compatible with existing code
+
+**Files Changed**: Gemfile, Gemfile.lock
+**Verification**: pending (advancing to TEST)
+
+---
+
+### Prompt #34 — TEST State (Security Remediation — CVE-2026-32700 / CVE-2026-40295)
+
+**Date**: 2026-05-19
+**Tool**: Claude Code
+**State**: TEST
+
+**Failure Summary**: GitHub Actions bundler-audit scan flagged devise 4.9.4 for
+CVE-2026-32700 and CVE-2026-40295. Required: devise >= 5.0.4.
+
+**Root Cause**: Gemfile constraint `gem "devise", "~> 4.9"` uses pessimistic versioning
+that caps the installed version below 5.0. bundler-audit detected both CVEs because the
+locked version (4.9.4) falls within the vulnerable range for both advisories.
+
+**Remediation Steps**:
+1. Changed `gem "devise", "~> 4.9"` → `gem "devise", "~> 5.0"` in Gemfile
+2. Ran `bundle update devise` → installed devise 5.0.4 (from 4.9.4)
+3. Verified bundler-audit: "No vulnerabilities found"
+4. Ran RSpec: 114 examples, 0 failures (Devise 5 fully compatible)
+5. Ran verify.sh: all 4 checks passed
+
+**Verification Results**:
+- bundler-audit: No vulnerabilities found ✓
+- db:prepare: succeeded ✓
+- RSpec: 114 examples, 0 failures ✓
+- Routes: 85 lines ✓
+- RuboCop: 81 files, no offenses ✓
+- .workflow_verified written at 2026-05-19T21:21:00Z
+
+**Files Changed**: Gemfile, Gemfile.lock
+**Verification**: passed
